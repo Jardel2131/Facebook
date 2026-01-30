@@ -1,0 +1,30 @@
+import React, { useState } from "react";
+import fakeAuth from "fake-auth";
+
+function SigninComponent(props) {
+  const [error, setError] = useState();
+
+  const handleSubmit = (email, pass) => {
+    fakeAuth
+      .signin(email, pass)
+      .then((response) => {
+        props.onSignin(response.user);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  return (
+    <form
+      onSubmit={(event) => {
+        const [email, pass] = event.target.children;
+        handleSubmit(email, pass);
+      }}
+    >
+      {error && <p>{error.message}</p>}
+      <input type="email" name="email" />
+      <input type="password" name="pass" />
+    </form>
+  );
+}
